@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>QLSV Portal • Quản lý sinh viên</title>
+  <style>
+    :root{
+      --primary:#5563DE;
+      --primary-dark:#4350c9;
+      --bg:#f5f6fa;
+      --text:#1f2937;
+      --muted:#6b7280;
+      --card:#ffffff;
+      --accent:#74ABE2;
+      --radius:14px;
+    }
+    *{box-sizing:border-box}
+    html,body{
+      margin:0; padding:0;
+      font-family:"Poppins",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--text); background:var(--bg);
+    }
+    a{color:inherit; text-decoration:none}
+    img{max-width:100%; display:block}
+
+    /* Header */
+    .header{
+      position:sticky; top:0; z-index:50;
+      background:linear-gradient(90deg,#ffffffcc,#ffffffee);
+      backdrop-filter:blur(8px);
+      border-bottom:1px solid #e5e7eb;
+    }
+    .nav{
+      max-width:1200px; margin:0 auto; padding:12px 20px;
+      display:flex; align-items:center; gap:16px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:10px;
+      font-weight:700; letter-spacing:.3px; font-size:18px;
+    }
+    .brand .logo{
+      width:38px; height:38px; border-radius:10px;
+      background:linear-gradient(135deg,var(--accent),var(--primary));
+      display:grid; place-items:center; color:#fff; font-weight:800;
+      box-shadow:0 4px 18px rgba(85,99,222,.35);
+    }
+    .spacer{flex:1}
+    .auth{display:flex; gap:10px; align-items:center;}
+    .btn{
+      border:none; padding:10px 16px; border-radius:12px; cursor:pointer; font-weight:600;
+      transition:all .2s ease;
+    }
+    .btn-primary{background:var(--primary); color:#fff; box-shadow:0 6px 18px rgba(85,99,222,.35);}
+    .btn-primary:hover{background:var(--primary-dark); transform:translateY(-1px);}
+
+    /* Hero */
+    .hero{
+      max-width:1200px; margin:40px auto; padding:28px 20px;
+      display:grid; grid-template-columns: 1.1fr .9fr; gap:28px;
+    }
+    .hero-card{
+      background:linear-gradient(135deg,#eef2ff,#ffffff);
+      border-radius:var(--radius);
+      padding:40px; display:grid; align-content:center; gap:14px;
+      box-shadow:0 10px 30px rgba(0,0,0,.06);
+      min-height:320px;
+    }
+    .eyebrow{color:var(--primary); font-weight:700; letter-spacing:.4px; text-transform:uppercase; font-size:12px;}
+    .hero h1{margin:0; font-size:34px; line-height:1.2;}
+    .hero p{margin:0; color:var(--muted);}
+    .cta{display:flex; gap:12px; margin-top:18px;}
+    .btn-outline{background:#fff; border:1px solid #e5e7eb;}
+    .btn-outline:hover{background:#f9fafb;}
+    .hero-img{
+      border-radius:var(--radius); overflow:hidden; min-height:320px;
+      background:url('https://images.unsplash.com/photo-1556761175-4b46a572b786?q=80&w=1640&auto=format&fit=crop')
+                 center/cover no-repeat;
+      box-shadow:0 20px 40px rgba(0,0,0,.15);
+    }
+
+    /* Modules (Categories) */
+    .section{max-width:1200px; margin:20px auto 28px; padding:0 20px;}
+    .section h2{margin:8px 0 18px; font-size:22px;}
+    .cats{display:grid; grid-template-columns: repeat(4, 1fr); gap:14px;}
+    .cat{
+      background:var(--card); border-radius:14px; padding:18px;
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      border:1px solid #eef2ff;
+      transition: transform .15s ease, box-shadow .15s ease;
+    }
+    .cat:hover{transform:translateY(-2px); box-shadow:0 10px 22px rgba(0,0,0,.07);}
+    .chip{font-size:12px; color:#6b7280}
+    .pill{background:#eef2ff; color:#111827; font-weight:600; padding:8px 10px; border-radius:10px;}
+
+    /* Features (Cards) */
+    .grid{display:grid; grid-template-columns: repeat(4, 1fr); gap:16px;}
+    .card{
+      background:var(--card); border-radius:14px; overflow:hidden; border:1px solid #eef2ff;
+      transition: transform .15s ease, box-shadow .15s ease;
+    }
+    .card:hover{transform:translateY(-2px); box-shadow:0 10px 22px rgba(0,0,0,.07);}
+    .card img{aspect-ratio:4/3; object-fit:cover;}
+    .card-body{padding:14px;}
+    .muted{color:var(--muted); font-size:14px;}
+    .feature-title{font-weight:700; margin-bottom:4px;}
+
+    /* Footer */
+    .footer{margin-top:34px; padding:28px 20px; background:#fff; border-top:1px solid #e5e7eb;}
+    .footer-inner{max-width:1200px; margin:0 auto; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; color:var(--muted);}
+
+    /* Responsive */
+    @media (max-width: 1024px){
+      .hero{grid-template-columns:1fr;}
+      .grid{grid-template-columns: repeat(3, 1fr);}
+      .cats{grid-template-columns: repeat(2, 1fr);}
+    }
+    @media (max-width: 640px){
+      .grid{grid-template-columns: repeat(2, 1fr);}
+    }
+  </style>
+</head>
+<body>
+
+<header class="header">
+  <nav class="nav">
+    <a class="brand" href="#">
+      <span class="logo">Q</span> QLSV Portal
+    </a>
+    <div class="spacer"></div>
+    <div class="auth">
+      <button class="btn btn-primary" onclick="goLogin()">Đăng nhập/Đăng ký</button>
+    </div>
+  </nav>
+</header>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-card">
+    <span class="eyebrow">Hệ thống học vụ</span>
+    <h1>Quản lý sinh viên toàn diện</h1>
+    <p>Theo dõi điểm số, lớp học, giảng viên và báo cáo học tập của bạn — tất cả trong một nền tảng duy nhất.</p>
+    <div class="cta">
+      <button class="btn btn-outline" onclick="goLogin()">Truy cập ngay</button>
+    </div>
+  </div>
+  <div class="hero-img"></div>
+</section>
+
+<!-- Modules -->
+<section class="section">
+  <h2>Danh mục chức năng</h2>
+  <div class="cats">
+    <a class="cat"><div><div class="chip">Module</div><div>Sinh viên</div></div><span class="pill">Xem danh sách</span></a>
+    <a class="cat"><div><div class="chip">Module</div><div>Giảng viên</div></div><span class="pill">Quản lý</span></a>
+    <a class="cat"><div><div class="chip">Module</div><div>Môn học</div></div><span class="pill">Chi tiết</span></a>
+    <a class="cat"><div><div class="chip">Module</div><div>Báo cáo & Phản hồi</div></div><span class="pill">Thống kê</span></a>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="section">
+  <h2>Tính năng nổi bật</h2>
+  <div class="grid">
+    <div class="card">
+      <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=800" alt="Quản lý sinh viên">
+      <div class="card-body">
+        <div class="feature-title">Quản lý hồ sơ sinh viên</div>
+        <div class="muted">Theo dõi thông tin cá nhân, lớp, mã sinh viên, và tình trạng học tập.</div>
+      </div>
+    </div>
+    <div class="card">
+      <img src="https://images.unsplash.com/photo-1600195077914-7b82b17cbe5c?q=80&w=800" alt="Điểm danh & điểm số">
+      <div class="card-body">
+        <div class="feature-title">Điểm danh & Kết quả học tập</div>
+        <div class="muted">Cập nhật điểm số, thống kê quá trình học của sinh viên.</div>
+      </div>
+    </div>
+    <div class="card">
+      <img src="https://images.unsplash.com/photo-1553877522-43269d4ea984?q=80&w=800" alt="Báo cáo học vụ">
+      <div class="card-body">
+        <div class="feature-title">Báo cáo học vụ tự động</div>
+        <div class="muted">Tạo biểu đồ, báo cáo học kỳ, giúp theo dõi tiến độ dễ dàng.</div>
+      </div>
+    </div>
+    <div class="card">
+      <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800" alt="Tích hợp Casdoor">
+      <div class="card-body">
+        <div class="feature-title">Đăng nhập bảo mật với Casdoor</div>
+        <div class="muted">Đảm bảo an toàn truy cập và quản lý danh tính tập trung.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div>© 2025 QLSV Portal. All rights reserved.</div>
+    <div>Hệ thống quản lý sinh viên | CMC University</div>
+  </div>
+</footer>
+
+<script>
+  const BACKEND = "http://localhost:9089"; // backend QLSV
+  const FRONTEND_CALLBACK =
+    `${location.origin}${location.pathname.replace(/\/[^/]*$/, '/') }auth-callback.html`;
+
+  function goLogin() {
+    window.location.href = `${BACKEND}/api/login?redirect_uri=${encodeURIComponent(FRONTEND_CALLBACK)}`;
+  }
+</script>
+
+</body>
+</html>
